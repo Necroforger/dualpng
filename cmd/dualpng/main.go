@@ -34,12 +34,16 @@ func main() {
 	out, err := os.Create("dual.png")
 	handle(err)
 
+	// Default values.
+	//     img1: range 0-240
+	//     img2: range 250-255
+
 	dp.Encode(
 		out,
 		dp.MergeImages(
 			dp.LevelImage(resize.Resize(1024, 0, img, resize.Lanczos3), 0, 230),
 			dp.LevelImage(resize.Resize(1024, 0, img2, resize.Lanczos3), 230, 255),
-			[][]int{
+			[][]int{ // 1 = opaque. 0 = transparent.
 				{1, 1},
 				{1, 0},
 			},

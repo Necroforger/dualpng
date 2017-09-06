@@ -61,6 +61,7 @@ func MergeImages(img1, img2 image.Image, maskmatrix [][]int) image.Image {
 	combined := image.NewRGBA(image.Rect(0, 0, maxWidth, maxHeight))
 
 	if maskmatrix == nil {
+		// Alternate filling pixels in a checkerboard pattern.
 		b = combined.Bounds()
 		for y := b.Min.Y; y < b.Max.Y; y++ {
 			for x := b.Min.X; x < b.Max.X; x++ {
@@ -72,6 +73,7 @@ func MergeImages(img1, img2 image.Image, maskmatrix [][]int) image.Image {
 			}
 		}
 	} else {
+		// Draw img1 over img2 with mask.
 		mask := CreateMask(maskmatrix, combined.Bounds())
 		draw.Draw(combined, img2.Bounds(), img2, image.ZP, draw.Src)
 		draw.DrawMask(combined, mask.Bounds(), img1, image.ZP, mask, image.ZP, draw.Over)

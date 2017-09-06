@@ -22,7 +22,7 @@ func main() {
 	f, err := os.Open("ika_musume.jpeg")
 	handle(err)
 
-	f2, err := os.Open("hakase.png")
+	f2, err := os.Open("hakase_trumpet.png")
 	handle(err)
 
 	img, _, err := image.Decode(f)
@@ -44,6 +44,6 @@ func main() {
 				{1, 0},
 			},
 		),
-		1000,
+		1000, // 2300 is usually the default gAMA value.
 	)
 }

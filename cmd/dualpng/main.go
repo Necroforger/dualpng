@@ -48,6 +48,6 @@ func main() {
 				{1, 0},
 			},
 		),
-		1000, // 2300 is usually the default gAMA value.
+		1000, // 2300 is usually the preferred gAMA value.
 	)
 }

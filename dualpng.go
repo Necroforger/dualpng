@@ -14,22 +14,17 @@ import (
 //    m : Mask matrix. Values greater than 0 will be opaque.
 //           Values lower than zero will be transparent.
 //    b : Bounds of the mask.
-func CreateMask(m [][]int, b image.Rectangle) image.Image {
+func CreateMask(m [][]float64, b image.Rectangle) *image.RGBA {
 	mask := image.NewRGBA(b)
-	var clr color.RGBA
+	w := b.Dx()
 
 	for y := b.Min.Y; y < b.Max.Y; y += len(m[0]) {
 		for x := b.Min.X; x < b.Max.X; x += len(m) {
 
-			// Draw mask
+			// Draw pattern
 			for i := 0; i < len(m) && i+y < b.Max.Y; i++ {
 				for j := 0; j < len(m[0]) && x+j < b.Max.X; j++ {
-					if m[i][j] > 0 {
-						clr = color.RGBA{0, 0, 0, 255}
-					} else {
-						clr = color.RGBA{0, 0, 0, 0}
-					}
-					mask.Set(x+j, y+i, clr)
+					mask.Pix[(y+i)*w*4+(x+j)*4+3] = uint8(m[i][j] * 255)
 				}
 			}
 
@@ -43,7 +38,7 @@ func CreateMask(m [][]int, b image.Rectangle) image.Image {
 //     img1       : first image
 //     img2       : Second image
 //     maskmatrix : Mask to use when merging two images together.
-func MergeImages(img1, img2 image.Image, maskmatrix [][]int) image.Image {
+func MergeImages(img1, img2 image.Image, maskmatrix [][]float64) *image.RGBA {
 	var maxWidth, maxHeight int
 	b := img1.Bounds()
 	b2 := img2.Bounds()
@@ -86,7 +81,7 @@ func MergeImages(img1, img2 image.Image, maskmatrix [][]int) image.Image {
 //     img  : Source image
 //     low  : Lowest RGB value in range
 //     high : Highest RGB value in range
-func LevelImage(img image.Image, low uint8, high uint8) image.Image {
+func LevelImage(img image.Image, low uint8, high uint8) *image.RGBA {
 	out := image.NewRGBA(img.Bounds())
 	b := img.Bounds()
 	level := func(n uint8, low, high uint8) uint8 {

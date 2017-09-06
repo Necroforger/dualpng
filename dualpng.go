@@ -1,6 +1,7 @@
 package dualpng
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/draw"
@@ -82,9 +83,10 @@ func MergeImages(img1, img2 image.Image, maskmatrix [][]float64) *image.RGBA {
 //     low  : Lowest RGB value in range
 //     high : Highest RGB value in range
 func LevelImage(img image.Image, low uint8, high uint8) *image.RGBA {
+	fmt.Println("LOW: ", low, " HIGH: ", high)
 	out := image.NewRGBA(img.Bounds())
 	b := img.Bounds()
-	level := func(n uint8, low, high uint8) uint8 {
+	level := func(n, low, high uint8) uint8 {
 		return uint8((float64(n)/255.0)*float64(high-low)) + low
 	}
 	for y := b.Min.Y; y < b.Max.Y; y++ {

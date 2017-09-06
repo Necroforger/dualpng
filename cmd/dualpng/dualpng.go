@@ -52,8 +52,8 @@ func parseRange(txt string) (from int, to int, err error) {
 	case 1:
 		to, err = strconv.Atoi(numbers[0])
 	case 2:
-		to, err = strconv.Atoi(numbers[0])
-		from, err = strconv.Atoi(numbers[1])
+		from, err = strconv.Atoi(numbers[0])
+		to, err = strconv.Atoi(numbers[1])
 	default:
 		err = errors.New("Invalid range")
 		return
@@ -147,8 +147,8 @@ func main() {
 	dp.Encode(
 		out,
 		dp.MergeImages(
-			dp.LevelImage(img1, uint8(r2From), uint8(r2To)),
-			dp.LevelImage(img2, uint8(r1From), uint8(r1To)),
+			dp.LevelImage(img1, uint8(r1From), uint8(r1To)),
+			dp.LevelImage(img2, uint8(r2From), uint8(r2To)),
 			mask,
 		),
 		uint32(*Gama),

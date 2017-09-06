@@ -63,7 +63,7 @@ func parseRange(txt string) (from int, to int, err error) {
 
 func getImage(path string) (image.Image, error) {
 	var (
-		source io.Reader
+		source io.ReadCloser
 		err    error
 	)
 
@@ -74,13 +74,13 @@ func getImage(path string) (image.Image, error) {
 			return nil, err
 		}
 		source = resp.Body
-		defer resp.Body.Close()
 	} else {
 		source, err = os.Open(path)
 		if err != nil {
 			return nil, err
 		}
 	}
+	defer source.Close()
 
 	img, _, err := image.Decode(source)
 	return img, err
@@ -140,8 +140,8 @@ func main() {
 	defer out.Close()
 
 	if *Width > 0 || *Height > 0 {
-		img2 = resize.Resize(1024, 0, img2, resize.Lanczos3)
-		img1 = resize.Resize(1024, 0, img1, resize.Lanczos3)
+		img2 = resize.Resize(*Width, *Height, img2, resize.Lanczos3)
+		img1 = resize.Resize(*Width, *Height, img1, resize.Lanczos3)
 	}
 
 	dp.Encode(

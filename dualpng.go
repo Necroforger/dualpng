@@ -1,7 +1,6 @@
 package dualpng
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	"image/draw"
@@ -19,8 +18,8 @@ func CreateMask(m [][]float64, b image.Rectangle) *image.RGBA {
 	mask := image.NewRGBA(b)
 	w := b.Dx()
 
-	for y := b.Min.Y; y < b.Max.Y; y += len(m[0]) {
-		for x := b.Min.X; x < b.Max.X; x += len(m) {
+	for y := b.Min.Y; y < b.Max.Y; y += len(m) {
+		for x := b.Min.X; x < b.Max.X; x += len(m[0]) {
 
 			// Draw pattern
 			for i := 0; i < len(m) && i+y < b.Max.Y; i++ {
@@ -83,7 +82,6 @@ func MergeImages(img1, img2 image.Image, maskmatrix [][]float64) *image.RGBA {
 //     low  : Lowest RGB value in range
 //     high : Highest RGB value in range
 func LevelImage(img image.Image, low uint8, high uint8) *image.RGBA {
-	fmt.Println("LOW: ", low, " HIGH: ", high)
 	out := image.NewRGBA(img.Bounds())
 	b := img.Bounds()
 	level := func(n, low, high uint8) uint8 {

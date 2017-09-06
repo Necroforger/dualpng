@@ -30,6 +30,7 @@ img1 or img2 can be either a local file or a web address like
 `dualpng -r1="230" -r2="230-255" -g 1300 -w 1500 -m=[[1,1],[1,0]] img1.png img2.png`
 ## Flags
 If only a width, or only a height is provided the missing field will be calculated to preserve the aspect ratio of the images.
+
 | Flag | Type   | Description                                                                                            |
 |------|--------|--------------------------------------------------------------------------------------------------------|
 | w    | Uint   | Width to resize both images to                                                                         |

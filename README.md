@@ -15,6 +15,9 @@
 # Cmd/dualpng
 ## Installation
 `go get github.com/Necroforer/dualpng/cmd/dualpng`
+
+Or download a version from the [releases](https://github.com/Necroforger/dualpng/releases)
+
 ## Usage
 `dualpng [flags] img1 img2`
 
@@ -37,6 +40,6 @@ If only a width, or only a height is provided the missing field will be calculat
 | h    | Uint   | Height to resize both images to                                                                        |
 | m    | String | Mask matrix to use for masking images. (ex) `[[1, 1],[1,0]]` will create a checkerboard pattern        |
 | r1   | String | Colour range for the first image (default: "0-240")                                                    |
-| r2   | String | Colour range for the second iamge (default: "240-255)                                                  |
+| r2   | String | Colour range for the second image (default: "240-255)                                                  |
 | g    | Uint   | gAMA value (default: 2300). The gAMA value is multiplied by 100,000. So a gAMA of 0.023 would be 2,300 |
 | o    | String | Path of the output image (default: "output.png")                                                       |

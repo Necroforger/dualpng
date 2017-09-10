@@ -1,0 +1,27 @@
+#header {
+    background-color: blueviolet;
+    padding: 1px;
+}
+
+.displayimage {
+    width: 100px;
+}
+
+.options {
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.spacer {
+    margin-top: 10px;
+}
+
+.result-pane {
+    border-radius: 10px;
+    border: dashed gray 1px;
+    width: 250px;
+}
+
+.result-pane img{
+    max-width: 100%;
+}

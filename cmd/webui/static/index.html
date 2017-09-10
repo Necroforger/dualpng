@@ -1,0 +1,296 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="/css/uikit.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/jquery-ui.min.css">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/uikit.min.js"></script>
+    <script src="/js/uikit-icons.min.js"></script>
+    <script src="/js/jquery-ui.min.js"></script>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <div id="header" class="uk-light">
+        <h2>Dualpng</h2>
+    </div>
+
+    <!-- UPLOAD FIELD ONE -->
+    <div class="uk-column-1" style="width: 49%; display: inline-block;">
+        <div id="upload1" class="uk-placeholder uk-text-center">
+            <span uk-icon="icon: cloud-upload"></span>
+            <span class="uk-text-middle">Drop an image</span>
+            <div uk-form-custom>
+                <input type="file" multiple>
+                <span class="uk-link">or select a file</span>
+            </div>
+            <img id="img1" class="displayimage" src="/image/TEST/img1">
+        </div>
+    </div>
+
+    <!-- UPLOAD FIELD TWO -->
+    <div style="width: 49%; display: inline-block;">
+        <div id="upload2" class="uk-placeholder uk-text-center">
+            <span uk-icon="icon: cloud-upload"></span>
+            <span class="uk-text-middle">Drop an image</span>
+            <div uk-form-custom>
+                <input type="file">
+                <span class="uk-link">or select a file</span>
+            </div>
+            <img id="img2" class="displayimage" src="/image/TEST/img2">
+        </div>
+    </div>
+
+    <progress id="progressbar" class="uk-progress" value="0" max="100" hidden></progress>
+
+    <!-- Dualpng options -->
+    <div class="uk-flex-direction" style="width: 100%;" uk-grid>
+        <div class="options uk-width-1-2">
+            <span> Range 1 start</span><br>
+            <input class="number-input" type="number" value="0" id="range1startfield">
+            <div class="spacer"></div>
+            <div class="slider" id="range1start"></div>
+            <div class="spacer"></div>
+
+            <span>Range 1 end </span><br>
+            <input class="number-input" type="number" value="240" id="range1endfield">
+            <div class="spacer"></div>
+            <div class="slider" id="range1end"></div>
+            <div class="spacer"></div>
+
+            <span> Range 2 start</span><br>
+            <input class="number-input" type="number" value="240" id="range2startfield">
+            <div class="spacer"></div>
+            <div class="slider" id="range2start"></div>
+            <div class="spacer"></div>
+
+            <span> Range 2 end</span><br>
+            <input class="number-input" type="number" value="255" id="range2endfield">
+            <div class="spacer"></div>
+            <div class="slider" id="range2end"></div>
+            <div class="spacer"></div>
+
+            <span>Gamma</span><br>
+            <input id="gammafield" type="number" value="2300"><br>
+            <div class="spacer"></div>
+            <div id="gama" class="slider"></div>
+            <div class="spacer"></div>
+
+            <!-- TODO Brightness sliders  -->
+
+            <div uk-grid>
+                <div>
+                    <span>Width</span><br>
+                    <input id="widthfield" type="number" value="500">
+                    <div class="spacer"></div>
+                </div>
+
+                <div>
+                    <span>Height</span><br>
+                    <input id="heightfield" type="number" value="0">
+                    <div class="spacer"></div>
+                </div>
+            </div>
+
+            <button id="btnmerge" class="uk-button uk-button-primary" style="width: 100%; margin-top: 10px;">Merge</button>
+        </div>
+
+        <div>
+            <div class="result-pane">
+                <span class="uk-text-center">Without gamma</span>
+                <img id="resultnogamma" src="/result/TEST/nogamma">
+            </div>
+
+            <div class="result-pane">
+                <span class="uk-text-center">Gamma applied</span>
+                <img id="resultgamma" src="/result/TEST/gamma">
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+        $(function () {
+            refreshImages();
+
+            $("#range1start").slider({
+                value: 0,
+                change: function (e, ui) {
+                    requestMerge();
+                },
+                slide: function (e, ui) {
+                    $("#range1startfield").val(ui.value);
+                },
+                step: 1,
+                max: 255,
+                min: 0,
+            });
+            $("#range1end").slider({
+                change: function (e, ui) {
+                    requestMerge();
+                },
+                slide: function (e, ui) {
+                    $("#range1endfield").val(ui.value);
+                },
+                value: 240,
+                step: 1,
+                max: 255,
+                min: 0,
+            });
+            $("#range2start").slider({
+                change: function (e, ui) {
+                    requestMerge();
+                },
+                slide: function (e, ui) {
+                    $("#range2startfield").val(ui.value);
+                },
+                value: 240,
+                step: 1,
+                max: 255,
+                min: 0,
+            });
+            $("#range2end").slider({
+                change: function (e, ui) {
+                    requestMerge();
+                },
+                slide: function (e, ui) {
+                    $("#range2endfield").val(ui.value);
+                },
+                step: 1,
+                value: 255,
+                max: 255,
+                min: 0,
+            });
+            $("#gama").slider({
+                change: function (e, ui) {
+                    requestMerge();
+                },
+                slide: function (e, ui) {
+                    $("#gammafield").val(ui.value);
+                },
+                step: 1,
+                min: 0,
+                max: 6000,
+                value: 2300,
+            });
+
+            $
+            $("#btnmerge").on("click", requestMerge);
+
+            var resultgammabig = false;
+            $(".result-pane").resizable()
+
+        });
+
+        function refreshImages() {
+            $("#img1")[0].setAttribute("src", "/image/TEST/img1?" + Math.random());
+            $("#img2")[0].setAttribute("src", "/image/TEST/img2?" + Math.random());
+            $("#resultgamma")[0].setAttribute("src", "/result/TEST/gamma?" + Math.random());
+            $("#resultnogamma")[0].setAttribute("src", "/result/TEST/nogamma?" + Math.random());
+        }
+
+        function requestMerge() {
+            $.post("/merge/TEST", {
+                gamma: $("#gammafield").val(),
+                width: $("#widthfield").val(),
+                height: $("#heightfield").val(),
+                r1start: $("#range1startfield").val(),
+                r2start: $("#range2startfield").val(),
+                r1end: $("#range1endfield").val(),
+                r2end: $("#range2endfield").val(),
+            }).done(function () {
+                $("#resultgamma")[0].setAttribute("src", "/result/TEST/gamma?" + Math.random());
+                $("#resultnogamma")[0].setAttribute("src", "/result/TEST/nogamma?" + Math.random());
+            });
+        }
+
+        (function ($) {
+            var img = $("#img1")[0]
+            var bar = $("#progressbar")[0];
+            UIkit.upload('#upload1', {
+                url: '/upload/TEST/img1',
+                name: "img",
+                multiple: false,
+                beforeSend: function () { console.log('beforeSend', arguments); },
+                beforeAll: function () { console.log('beforeAll', arguments); },
+                load: function () { console.log('load', arguments); },
+                error: function () { console.log('error', arguments); },
+                complete: function () { console.log('complete', arguments); },
+                loadStart: function (e) {
+                    img.setAttribute('hidden', 'hidden')
+                    console.log('loadStart', arguments);
+                    bar.removeAttribute('hidden');
+                    bar.max = e.total;
+                    bar.value = e.loaded;
+                },
+                progress: function (e) {
+                    console.log('progress', arguments);
+                    bar.max = e.total;
+                    bar.value = e.loaded;
+                },
+                loadEnd: function (e) {
+                    console.log('loadEnd', arguments);
+                    bar.max = e.total;
+                    bar.value = e.loaded;
+                },
+                completeAll: function () {
+                    console.log('completeAll', arguments);
+                    img.removeAttribute('hidden')
+                    img.setAttribute("src", "/image/TEST/img1?" + Math.random().toString())
+                    requestMerge();
+                    setTimeout(function () {
+                        bar.setAttribute('hidden', 'hidden');
+                    }, 1000);
+                }
+            });
+        })(jQuery);
+
+
+        (function ($) {
+            var img = $("#img2")[0]
+            var bar = $("#progressbar")[0];
+
+            UIkit.upload('#upload2', {
+                url: '/upload/TEST/img2',
+                name: "img",
+                multiple: false,
+                beforeSend: function () { console.log('beforeSend', arguments); },
+                beforeAll: function () { console.log('beforeAll', arguments); },
+                load: function () { console.log('load', arguments); },
+                error: function () { console.log('error', arguments); },
+                complete: function () { console.log('complete', arguments); },
+                loadStart: function (e) {
+                    img.setAttribute('hidden', 'hidden')
+                    console.log('loadStart', arguments);
+                    bar.removeAttribute('hidden');
+                    bar.max = e.total;
+                    bar.value = e.loaded;
+                },
+                progress: function (e) {
+                    console.log('progress', arguments);
+                    bar.max = e.total;
+                    bar.value = e.loaded;
+                },
+                loadEnd: function (e) {
+                    console.log('loadEnd', arguments);
+                    bar.max = e.total;
+                    bar.value = e.loaded;
+                },
+                completeAll: function () {
+                    console.log('completeAll', arguments);
+                    requestMerge();
+                    img.removeAttribute('hidden')
+                    img.setAttribute("src", "/image/TEST/img2?" + Math.random().toString())
+                    setTimeout(function () {
+                        bar.setAttribute('hidden', 'hidden');
+                    }, 1000);
+                }
+            });
+        })(jQuery);
+    </script>
+
+</body>
+
+</html>

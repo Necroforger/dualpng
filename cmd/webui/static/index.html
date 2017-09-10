@@ -77,7 +77,17 @@
             <div id="gama" class="slider"></div>
             <div class="spacer"></div>
 
-            <!-- TODO Brightness sliders  -->
+            <span>Brightness 1</span><br>
+            <input id="brightness1field" type="number" value="1"><br>
+            <div class="spacer"></div>
+            <div id="brightness1" class="slider"></div>
+            <div class="spacer"></div>
+
+            <span>Brightness 2</span><br>
+            <input id="brightness2field" type="number" value="1"><br>
+            <div class="spacer"></div>
+            <div id="brightness2" class="slider"></div>
+            <div class="spacer"></div>
 
             <div uk-grid>
                 <div>
@@ -163,6 +173,30 @@
                 max: 255,
                 min: 0,
             });
+            $("#brightness1").slider({
+                change: function (e, ui) {
+                    requestMerge();
+                },
+                slide: function (e, ui) {
+                    $("#brightness1field").val(ui.value);
+                },
+                step: 0.01,
+                min: 0,
+                max: 2,
+                value: 1,
+            })
+            $("#brightness2").slider({
+                change: function (e, ui) {
+                    requestMerge();
+                },
+                slide: function (e, ui) {
+                    $("#brightness2field").val(ui.value);
+                },
+                step: 0.01,
+                min: 0,
+                max: 2,
+                value: 1,
+            })
             $("#gama").slider({
                 change: function (e, ui) {
                     requestMerge();
@@ -200,6 +234,8 @@
                 r2start: $("#range2startfield").val(),
                 r1end: $("#range1endfield").val(),
                 r2end: $("#range2endfield").val(),
+                brightness1: $("#brightness1field").val(),
+                brightness2: $("#brightness2field").val(),
             }).done(function () {
                 $("#resultgamma")[0].setAttribute("src", "/result/TEST/gamma?" + Math.random());
                 $("#resultnogamma")[0].setAttribute("src", "/result/TEST/nogamma?" + Math.random());

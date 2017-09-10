@@ -109,7 +109,14 @@ func ScaleBrightness(img image.Image, scale float64) *image.RGBA {
 	out := image.NewRGBA(img.Bounds())
 	b := img.Bounds()
 	brighten := func(n uint32, scale float64) uint8 {
-		return uint8(uint32(float64(n)*scale) >> 8)
+		b := uint32(float64(n)*scale) >> 8
+		if b > 255 {
+			b = 255
+		}
+		if b < 0 {
+			b = 0
+		}
+		return uint8(b)
 	}
 	for y := b.Min.Y; y < b.Max.Y; y++ {
 		for x := b.Min.X; x < b.Max.X; x++ {

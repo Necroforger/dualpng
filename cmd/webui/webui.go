@@ -153,6 +153,18 @@ func MergeHandler(w http.ResponseWriter, r *http.Request) {
 		return n
 	}
 
+	parseFloat := func(str string) float64 {
+		if str == "" {
+			return 0
+		}
+		n, e := strconv.ParseFloat(str, 64)
+		if e != nil {
+			log.Println("Error parsing float: ", e)
+			err = e
+		}
+		return n
+	}
+
 	r1start := parseInt(r.Form.Get("r1start"))
 	r1end := parseInt(r.Form.Get("r1end"))
 	r2start := parseInt(r.Form.Get("r2start"))
@@ -160,6 +172,8 @@ func MergeHandler(w http.ResponseWriter, r *http.Request) {
 	gamma := parseInt(r.Form.Get("gamma"))
 	width := parseInt(r.Form.Get("width"))
 	height := parseInt(r.Form.Get("height"))
+	brightness1 := parseFloat(r.Form.Get("brightness1"))
+	brightness2 := parseFloat(r.Form.Get("brightness2"))
 	if err != nil {
 		writeStatus(w, http.StatusInternalServerError)
 		return
@@ -172,6 +186,14 @@ func MergeHandler(w http.ResponseWriter, r *http.Request) {
 	if width > 0 || height > 0 {
 		img1 = resize.Resize(uint(width), uint(height), img1, resize.Lanczos3)
 		img2 = resize.Resize(uint(width), uint(height), img2, resize.Lanczos3)
+	}
+
+	// Scale brightness
+	if brightness1 != 1 {
+		img1 = dualpng.ScaleBrightness(img1, brightness1)
+	}
+	if brightness2 != 1 {
+		img2 = dualpng.ScaleBrightness(img2, brightness2)
 	}
 
 	s.Result = dualpng.MergeImages(

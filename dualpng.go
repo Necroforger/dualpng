@@ -101,6 +101,30 @@ func LevelImage(img image.Image, low uint8, high uint8) *image.RGBA {
 	return out
 }
 
+// ScaleBrightness scales the brightness of the given image by the amount `value`
+//    img    : source image
+//    scale  : value between zero and one to multiply the colour of
+//             all pixels in the image by.
+func ScaleBrightness(img image.Image, scale float64) *image.RGBA {
+	out := image.NewRGBA(img.Bounds())
+	b := img.Bounds()
+	brighten := func(n uint32, scale float64) uint8 {
+		return uint8(uint32(float64(n)*scale) >> 8)
+	}
+	for y := b.Min.Y; y < b.Max.Y; y++ {
+		for x := b.Min.X; x < b.Max.X; x++ {
+			r, g, b, a := img.At(x, y).RGBA()
+			out.Set(x, y, color.RGBA{
+				brighten(r, scale),
+				brighten(g, scale),
+				brighten(b, scale),
+				uint8(a >> 8),
+			})
+		}
+	}
+	return out
+}
+
 // Encode encodes the image with as png with a gAMA chunk
 // with value gAMA. gAMA values are multiplied by 100,000
 // so if you want to use a gAMA value of 0.023, you would enter

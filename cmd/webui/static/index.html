@@ -106,7 +106,7 @@
             <button id="btnmerge" class="uk-button uk-button-primary" style="width: 100%; margin-top: 10px;">Merge</button>
         </div>
 
-        <div>
+        <div class="">
             <div class="result-pane">
                 <span class="uk-text-center">Without gamma</span>
                 <img id="resultnogamma" src="/result/TEST/nogamma">
@@ -227,15 +227,15 @@
 
         function requestMerge() {
             $.post("/merge/TEST", {
-                gamma: $("#gammafield").val(),
-                width: $("#widthfield").val(),
-                height: $("#heightfield").val(),
-                r1start: $("#range1startfield").val(),
-                r2start: $("#range2startfield").val(),
-                r1end: $("#range1endfield").val(),
-                r2end: $("#range2endfield").val(),
-                brightness1: $("#brightness1field").val(),
-                brightness2: $("#brightness2field").val(),
+                gamma: $("#gammafield").val() || "0",
+                width: $("#widthfield").val() || "0",
+                height: $("#heightfield").val() || "0",
+                r1start: $("#range1startfield").val() || "0",
+                r2start: $("#range2startfield").val() || "0",
+                r1end: $("#range1endfield").val() || "0",
+                r2end: $("#range2endfield").val() || "0",
+                brightness1: $("#brightness1field").val() || "0",
+                brightness2: $("#brightness2field").val() || "0",
             }).done(function () {
                 $("#resultgamma")[0].setAttribute("src", "/result/TEST/gamma?" + Math.random());
                 $("#resultnogamma")[0].setAttribute("src", "/result/TEST/nogamma?" + Math.random());

@@ -2,6 +2,7 @@
 <!-- TOC -->
 
 - [Dualpng](#dualpng)
+- [Cmd/webui](#cmdwebui)
 - [Cmd/dualpng](#cmddualpng)
     - [Installation](#installation)
     - [Usage](#usage)
@@ -12,6 +13,15 @@
     - [Flags](#flags)
 
 <!-- /TOC -->
+# Cmd/webui
+Merge images with a drag and drop interface.
+Download a version from the [releases](https://github.com/Necroforger/dualpng/releases)
+
+visit http://localhost in your browser to view the ui. it will launch on port 80 by default.
+
+
+![img](https://i.imgur.com/6JDBhgs.gif)
+
 # Cmd/dualpng
 ## Installation
 `go get github.com/Necroforer/dualpng/cmd/dualpng`

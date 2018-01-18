@@ -22,7 +22,7 @@ import (
 
 // Flags
 var (
-	Port         = flag.String("p", ":80", "Server port")
+	Port         = flag.String("p", "80", "Server port")
 	SessionLimit = flag.Int("-session-limit", 10, "Controls how many sessions can exist at time.")
 )
 
@@ -130,7 +130,7 @@ func MergeHandler(w http.ResponseWriter, r *http.Request) {
 	defer s.Unlock()
 
 	if s.Img1 == nil || s.Img2 == nil {
-		writeStatus(w, http.StatusPreconditionRequired)
+		writeStatus(w, 400)
 		log.Println("Either img1 or img2 is nil")
 		return
 	}
@@ -264,6 +264,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	r := mux.NewRouter()
+	flag.Parse()
 
 	sessions = append(sessions, &Session{
 		ID: "TEST",
@@ -277,12 +278,12 @@ func main() {
 
 	srv := &http.Server{
 		Handler:      r,
-		Addr:         "127.0.0.1" + *Port,
+		Addr:         "127.0.0.1" + ":" + *Port,
 		ReadTimeout:  time.Second * 10,
 		WriteTimeout: time.Second * 10,
 	}
 
-	log.Println("Attempting to start server on port [" + *Port + "]")
+	log.Println("Attempting to start server on port [" + ":" + *Port + "]")
 	if err := srv.ListenAndServe(); err != nil {
 		log.Println("error starting server: ", err)
 	}

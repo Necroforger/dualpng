@@ -82,7 +82,7 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 	if img != nil {
 		writePNG(w, img)
 	} else {
-		http.ServeFile(w, r, "static/images/placeholder.png")
+		http.Redirect(w, r, "/images/placeholder.png", 303)
 	}
 }
 
@@ -104,7 +104,7 @@ func ResultHandler(w http.ResponseWriter, r *http.Request) {
 	defer s.Unlock()
 
 	if s.Result == nil {
-		http.ServeFile(w, r, "static/images/placeholder.png")
+		http.Redirect(w, r, "/images/placeholder.png", 303)
 		return
 	}
 

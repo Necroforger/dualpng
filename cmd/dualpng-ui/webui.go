@@ -20,9 +20,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
+//go:generate go-bindata-assetfs static/...
+
 // Flags
 var (
-	Port         = flag.String("p", "80", "Server port")
+	Port         = flag.String("p", "8800", "Server port")
+	Dir          = flag.String("d", "", "Asset directory, If none provided, the embedded ui will be run")
 	SessionLimit = flag.Int("-session-limit", 10, "Controls how many sessions can exist at time.")
 )
 
@@ -270,11 +273,18 @@ func main() {
 		ID: "TEST",
 	})
 
+	var fileSystem http.FileSystem
+	if *Dir == "" {
+		fileSystem = assetFS()
+	} else {
+		fileSystem = http.Dir(*Dir)
+	}
+
 	r.HandleFunc("/image/{id}/{imgname}", ImageHandler)
 	r.HandleFunc("/result/{id}/{mode}", ResultHandler)
 	r.HandleFunc("/upload/{id}/{imgname}", UploadHandler).Methods("POST")
 	r.HandleFunc("/merge/{id}", MergeHandler).Methods("POST")
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir("static")))
+	r.PathPrefix("/").Handler(http.FileServer(fileSystem))
 
 	srv := &http.Server{
 		Handler:      r,
@@ -283,7 +293,8 @@ func main() {
 		WriteTimeout: time.Second * 10,
 	}
 
-	log.Println("Attempting to start server on port [" + ":" + *Port + "]")
+	log.Println("Starting server on port [" + ":" + *Port + "]")
+	log.Println("Connect to http://localhost:" + *Port + "/ in your browser")
 	if err := srv.ListenAndServe(); err != nil {
 		log.Println("error starting server: ", err)
 	}
